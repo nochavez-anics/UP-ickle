@@ -104,7 +104,6 @@ public:
     void updateSprite(float dt) {
         float heightRatio = clamp(z / 120.f, 0.f, 1.f);
 
-        // Scale matches main-2: 0.52 base + small height bonus
         float scale = 0.52f + heightRatio * 0.12f;
 
         if (bounceActive)
@@ -230,10 +229,10 @@ public:
     const float netY            = 375.f;
     const float courtTopEdge    = 90.f;
     const float courtBottomEdge = 665.f;
-    const float fieldLeft       = courtLeft  - 100.f;   // 395
-    const float fieldRight      = courtRight + 100.f;   // 980
-    const float deadZoneTop     = courtTopEdge    - 20.f; // 70
-    const float deadZoneBottom  = courtBottomEdge + 20.f; // 685
+    const float fieldLeft       = courtLeft  - 100.f;   
+    const float fieldRight      = courtRight + 100.f;   
+    const float deadZoneTop     = courtTopEdge    - 20.f;
+    const float deadZoneBottom  = courtBottomEdge + 20.f;
     const float outsideLeft     = 493.f;
     const float outsideRight    = 883.f;
 
@@ -244,7 +243,6 @@ public:
     Player p1, p2;
     Ball   ball;
 
-    // ── Shared animation enum ────────────────────────────────────────────────
     enum class Anim { Idle, WalkSide, WalkFwd, Swing };
 
     // ── P1 Sprite Textures ───────────────────────────────────────────────────
@@ -332,9 +330,9 @@ public:
     std::string winnerName;    // set to p1Name or p2Name on game over
     std::string p1Name = "P1";
     std::string p2Name = "P2";
-    float flashTimer = 0.f;    // accumulates time for flashing
-    float flashPhase = 0.f;    // sin-driven 0..1 for text flash alpha
-    float burstAngle = 0.f;    // slowly rotating sunburst
+    float flashTimer = 0.f;    
+    float flashPhase = 0.f;    
+    float burstAngle = 0.f;    
 
     // ── Curve system ─────────────────────────────────────────────────────────
     float curveForce   = 0.f;
@@ -373,7 +371,6 @@ public:
         p2ScoreBox.setPosition({courtLeft - 140.f, netY + 10.f});
     }
 
-    // ---- Helpers ----
     bool isNearCourtSideEdge(float x) const {
         const float edgeThreshold = 50.f;
         return x <= courtLeft + edgeThreshold || x >= courtRight - edgeThreshold;
@@ -406,7 +403,7 @@ public:
             bgH / bgCourtTexture.getSize().y));
         bgCourtSprite->setPosition({0.f, 0.f});
 
-        // Winner background — optional, gracefully absent
+      
         if (winnerBgTexture.loadFromFile("winnerbg.png")) {
             winnerBgSprite.emplace(winnerBgTexture);
             winnerBgSprite->setScale(sf::Vector2f(
@@ -473,11 +470,7 @@ public:
         p2ScoreSprite2.emplace(p2ScoreTex2);
         p2SighSprite.emplace(p2SighTex);
 
-        // Font — pixel font for cohesive retro aesthetic across all screens
-        // Expects PressStart2P-Regular.ttf next to the executable.
-        // Falls back to a system font so the game still runs without it.
         if (!font.openFromFile("PressStart2P-Regular.ttf")) {
-            // macOS fallback
             if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc")) return false;
         }
 
@@ -524,11 +517,9 @@ public:
 
     // ---- Name Entry ----
     void showNameEntry() {
-        // Reuse the main window — it's already open after init()
         const float W = bgW, H = bgH;
         const float cx = W * 0.5f, cy = H * 0.5f;
-
-        // Which player we're currently naming (0 = P1, 1 = P2)
+        
         int stage = 0;
         std::string drafts[2] = {"", ""};
         const std::string defaults[2] = {"P1", "P2"};
@@ -585,17 +576,14 @@ public:
             }
 
             window.clear();
-            // Draw court background
             if (bgCourtSprite)         window.draw(*bgCourtSprite);
             else if (backgroundSprite) window.draw(*backgroundSprite);
-
-            // Semi-transparent dark overlay so UI pops
+            
             sf::RectangleShape overlay({W, H});
             overlay.setFillColor(sf::Color(0, 0, 10, 170));
             window.draw(overlay);
 
             if (font.getInfo().family != "") {
-                // ── "ENTER PLAYER NAME" title — pixel gold with dark outline ──
                 sf::Text title(font, prompts[stage], 28);
                 title.setFillColor(sf::Color(255, 215, 0));
                 title.setOutlineColor(sf::Color(60, 30, 0, 220));
@@ -610,9 +598,8 @@ public:
 
                 // ── Pixel-art input panel ──────────────────────────────────
                 const float boxW = 480.f, boxH = 64.f;
-                // Outer border (4 px pixel-style double border)
                 sf::RectangleShape outerBox({boxW + 8.f, boxH + 8.f});
-                outerBox.setFillColor(sf::Color(255, 215, 0));          // gold fill acts as border
+                outerBox.setFillColor(sf::Color(255, 215, 0));
                 outerBox.setOrigin({(boxW + 8.f)/2.f, (boxH + 8.f)/2.f});
                 outerBox.setPosition({cx, cy + 10.f});
                 window.draw(outerBox);
@@ -624,7 +611,6 @@ public:
                 innerBox.setPosition({cx, cy + 10.f});
                 window.draw(innerBox);
 
-                // Typed text (centred in box)
                 sf::Text inputText(font, drafts[stage], 24);
                 inputText.setFillColor(colours[stage]);
                 inputText.setOutlineColor(sf::Color(0, 0, 0, 160));
@@ -636,7 +622,6 @@ public:
                     float textY = cy + 10.f - b.size.y/2.f - b.position.y;
                     inputText.setPosition({textX, textY});
 
-                    // Draw blinking cursor block after last character
                     if (cursorOn) {
                         cursorBlock.setPosition({textX + b.size.x + 6.f, textY + 2.f});
                         window.draw(cursorBlock);
@@ -644,7 +629,7 @@ public:
                 }
                 window.draw(inputText);
 
-                // ── "PRESS ENTER TO CONFIRM" hint ─────────────────────────
+                // ── "PRESS ENTER TO CONFIRM"
                 sf::Text hint(font, "PRESS ENTER TO CONFIRM", 10);
                 hint.setFillColor(sf::Color(180, 180, 200, 190));
                 {
@@ -655,7 +640,6 @@ public:
                 }
                 window.draw(hint);
 
-                // ── Player badge strip (shows which player is being named) ─
                 {
                     // Small coloured pill label
                     const sf::Color badgeCol = colours[stage];
@@ -676,8 +660,7 @@ public:
                     badgeTxt.setPosition({cx, cy - 60.f});
                     window.draw(badgeTxt);
                 }
-
-                // ── Already-confirmed P1 name shown while entering P2 ─────
+                
                 if (stage == 1 && !drafts[0].empty()) {
                     sf::Text done(font, "P1: " + drafts[0], 12);
                     done.setFillColor(sf::Color(100, 220, 255, 210));
@@ -702,7 +685,6 @@ public:
         p1Name = drafts[0].empty() ? defaults[0] : drafts[0];
         p2Name = drafts[1].empty() ? defaults[1] : drafts[1];
 
-        // Score texts are numeric — no name prefix needed
         if (serveText)  serveText->setString("X to Serve (" + p1Name + ")");
         if (p1PosText)  p1PosText->setString(p1Name + " (0, 0)");
         if (p2PosText)  p2PosText->setString(p2Name + " (0, 0)");
