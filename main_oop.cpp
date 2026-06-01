@@ -384,7 +384,7 @@ public:
 
     // ---- Init ----
     bool init() {
-        if (!backgroundTexture.loadFromFile("background.png")) return false;
+        if (!backgroundTexture.loadFromFile("assets/background.png")) return false;
         sf::Vector2u bgSize = backgroundTexture.getSize();
         bgW = static_cast<float>(bgSize.x);
         bgH = static_cast<float>(bgSize.y);
@@ -396,7 +396,7 @@ public:
         backgroundSprite.emplace(backgroundTexture);
         backgroundSprite->setPosition({0.f, 0.f});
 
-        if (!bgCourtTexture.loadFromFile("BG.png")) return false;
+        if (!bgCourtTexture.loadFromFile("assets/BG.png")) return false;
         bgCourtSprite.emplace(bgCourtTexture);
         bgCourtSprite->setScale(sf::Vector2f(
             bgW / bgCourtTexture.getSize().x,
@@ -404,7 +404,7 @@ public:
         bgCourtSprite->setPosition({0.f, 0.f});
 
       
-        if (winnerBgTexture.loadFromFile("winnerbg.png")) {
+        if (winnerBgTexture.loadFromFile("assets/winnerbg.png")) {
             winnerBgSprite.emplace(winnerBgTexture);
             winnerBgSprite->setScale(sf::Vector2f(
                 bgW / winnerBgTexture.getSize().x,
@@ -423,18 +423,18 @@ public:
         p1.setPosition({courtLeft + 295.f, courtBottomEdge});
         p2.setPosition({courtLeft + 100.f, courtTopEdge});
 
-        if (!ball.loadTexture("ball.png")) return false;
+        if (!ball.loadTexture("assets/ball.png")) return false;
         ball.setPosition({courtLeft + 295.f, courtBottomEdge - 35.f});
 
         // P1 textures
-        if (!p1TexNormal.loadFromFile("P1.png"))              return false;
-        if (!p1TexIdle.loadFromFile("P1idle.png"))            return false;
-        if (!p1TexSwing1.loadFromFile("player1swing1.png"))   return false;
-        if (!p1TexSwing2.loadFromFile("player1swing2.png"))   return false;
-        if (!p1TexStep1.loadFromFile("p1step1.png"))          return false;
-        if (!p1TexStep2.loadFromFile("p1step2.png"))          return false;
-        if (!p1TexFwd1.loadFromFile("forward1.png"))          return false;
-        if (!p1TexFwd2.loadFromFile("forward2.png"))          return false;
+        if (!p1TexNormal.loadFromFile("assets/P1.png"))              return false;
+        if (!p1TexIdle.loadFromFile("assets/P1idle.png"))            return false;
+        if (!p1TexSwing1.loadFromFile("assets/player1swing1.png"))   return false;
+        if (!p1TexSwing2.loadFromFile("assets/player1swing2.png"))   return false;
+        if (!p1TexStep1.loadFromFile("assets/p1step1.png"))          return false;
+        if (!p1TexStep2.loadFromFile("assets/p1step2.png"))          return false;
+        if (!p1TexFwd1.loadFromFile("assets/forward1.png"))          return false;
+        if (!p1TexFwd2.loadFromFile("assets/forward2.png"))          return false;
 
         p1Sprite.emplace(p1TexNormal);
         p1Sprite->setOrigin(sf::Vector2f(
@@ -442,13 +442,13 @@ public:
             p1TexNormal.getSize().y / 2.f));
 
         // P2 textures
-        if (!p2TexNormal.loadFromFile("P2.png"))              return false;
-        if (!p2TexIdle.loadFromFile("P2idle.png"))            return false;
-        if (!p2TexSwing1.loadFromFile("player2swing1.png"))   return false;
-        if (!p2TexStep1.loadFromFile("p2step1.png"))          return false;
-        if (!p2TexStep2.loadFromFile("p2step2.png"))          return false;
-        if (!p2TexFwd1.loadFromFile("p2forward1.png"))        return false;
-        if (!p2TexFwd2.loadFromFile("p2forward2.png"))        return false;
+        if (!p2TexNormal.loadFromFile("assets/P2.png"))              return false;
+        if (!p2TexIdle.loadFromFile("assets/P2idle.png"))            return false;
+        if (!p2TexSwing1.loadFromFile("assets/player2swing1.png"))   return false;
+        if (!p2TexStep1.loadFromFile("assets/p2step1.png"))          return false;
+        if (!p2TexStep2.loadFromFile("assets/p2step2.png"))          return false;
+        if (!p2TexFwd1.loadFromFile("assets/p2forward1.png"))        return false;
+        if (!p2TexFwd2.loadFromFile("assets/p2forward2.png"))        return false;
 
         p2Sprite.emplace(p2TexNormal);
         p2Sprite->setOrigin(sf::Vector2f(
@@ -456,12 +456,11 @@ public:
             p2TexNormal.getSize().y / 2.f));
 
         // Score / Sigh animation textures
-        if (!p1ScoreTex1.loadFromFile("p1score1.png")) return false;
-        if (!p1ScoreTex2.loadFromFile("p1score2.png")) return false;
-        if (!p1SighTex.loadFromFile("p1sigh.png"))     return false;
-        if (!p2ScoreTex.loadFromFile("p2score.png"))   return false;
-        if (!p2ScoreTex2.loadFromFile("P2.png"))       return false;
-        if (!p2SighTex.loadFromFile("p2sigh.png"))     return false;
+        if (!p1ScoreTex1.loadFromFile("assets/p1score1.png")) return false;
+        if (!p1ScoreTex2.loadFromFile("assets/p1score2.png")) return false;
+        if (!p1SighTex.loadFromFile("assets/p1sigh.png"))     return false;
+        if (!p2ScoreTex.loadFromFile("assets/p2score.png"))   return false;
+        if (!p2SighTex.loadFromFile("assets/p2sigh.png"))     return false;
 
         p1ScoreSprite1.emplace(p1ScoreTex1);
         p1ScoreSprite2.emplace(p1ScoreTex2);
@@ -470,7 +469,7 @@ public:
         p2ScoreSprite2.emplace(p2ScoreTex2);
         p2SighSprite.emplace(p2SighTex);
 
-        if (!font.openFromFile("PressStart2P-Regular.ttf")) {
+        if (!font.openFromFile("assets/PressStart2P-Regular.ttf")) {
             if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc")) return false;
         }
 
