@@ -312,7 +312,7 @@ public:
     float p2SwingAnimTimer  = 0.f;
     int   p2SwingAnimFrame  = 0;
     bool  p2SwingAnimDone   = true;
-    const float p2SwingFrameDur = 0.18f;  // P2 only has 1 swing frame, hold longer
+    const float p2SwingFrameDur = 0.18f; 
 
     // P2 swing circle
     sf::CircleShape p2SwingCircle;
@@ -641,7 +641,6 @@ public:
                 window.draw(hint);
 
                 {
-                    // Small coloured pill label
                     const sf::Color badgeCol = colours[stage];
                     sf::RectangleShape badge({160.f, 32.f});
                     badge.setFillColor(sf::Color(badgeCol.r, badgeCol.g, badgeCol.b, 50));
@@ -1003,8 +1002,7 @@ public:
         }
         p1Sprite->setPosition(p1.getPosition());
 
-        // ── P1 score/sigh sprite sync — recompute every frame so they
-        //    always track the live p1 position and facing direction
+        // ── P1 score/sigh sprite sync
         {
             const float targetW = 72.f, targetH = 96.f;
             bool mirror = p1FacingLeft;
@@ -1126,8 +1124,6 @@ public:
         }
         p2Sprite->setPosition(p2.getPosition());
 
-        // ── P2 score/sigh sprite sync — recompute every frame so they
-        //    always track the live p2 position and facing direction
         {
             const float targetW = 72.f, targetH = 96.f;
             bool mirror = p2FacingLeft;
@@ -1188,7 +1184,6 @@ public:
                      p2.dashDirY * p2.dashSpeed * dt});
         }
 
-        // Clamp P1 — matches main-2 fixed Y values
         auto pos1 = p1.getPosition();
         if (!ball.inPlay && ballOwner)
             pos1.x = clamp(pos1.x, courtCenter, courtRight);
@@ -1197,7 +1192,6 @@ public:
         pos1.y = clamp(pos1.y, 496.f, courtBottomEdge);
         p1.setPosition(pos1);
 
-        // Clamp P2 — matches main-2 fixed Y values
         auto pos2 = p2.getPosition();
         if (!ball.inPlay && !ballOwner)
             pos2.x = clamp(pos2.x, courtLeft, courtCenter);
@@ -1281,11 +1275,10 @@ public:
         bool crossingNet = (prevY < netY && nextY >= netY) ||
                            (prevY > netY && nextY <= netY);
         if (crossingNet && ball.z < 20.f) {
-            // Hit the net — reverse vertical velocity, damp, bounce back
             ball.vy *= -0.35f;
             ball.vx *= 0.6f;
             ball.vz  = max(ball.vz, 60.f);
-            nextY    = prevY; // don't cross
+            nextY    = prevY; 
         }
 
         ball.setPosition({nextX, nextY});
@@ -1400,10 +1393,8 @@ public:
         const float cx = W * 0.5f, cy = H * 0.5f;
 
         if (winnerBgSprite) {
-            // Use the provided winner background image
             window.draw(*winnerBgSprite);
         } else {
-            // Fallback: deep navy overlay + slow sunburst
             sf::RectangleShape overlay({W, H});
             overlay.setFillColor(sf::Color(8, 14, 42, 210));
             window.draw(overlay);
@@ -1444,11 +1435,9 @@ public:
         scoreBox.setPosition({cx, H * 0.82f});
         window.draw(scoreBox);
 
-        // Score panel text using pixel font — sized to match name entry screen
         if (font.getInfo().family != "") {
             auto makeScore = [&](const std::string& name, int score,
                                  sf::Color col, float yOff) {
-                // Size 14 keeps pixel font readable inside the score box
                 sf::Text t(font, name + ": " + to_string(score), 14);
                 t.setFillColor(col);
                 t.setOutlineColor(sf::Color(0, 0, 0, 180));
@@ -1463,9 +1452,7 @@ public:
             makeScore(p2Name, score2, sf::Color(255, 140, 100),  22.f);
         }
 
-        // Flashing winner name — same gold + dark-outline style as name entry title
         if (font.getInfo().family != "") {
-            // Size 32: large enough to be prominent, fits pixel font without overflow
             sf::Text wt(font, winnerName + " WINS!", 32);
             uint8_t r = 255;
             uint8_t g = static_cast<uint8_t>(160 + flashPhase * 95.f);
@@ -1507,9 +1494,6 @@ public:
             p2SwingCircle.setPosition(p2.getPosition());
             window.draw(p2SwingCircle);
         }
-
-        // During a score animation, replace the base sprites with
-        // the appropriate score/sigh sprites so characters don't duplicate.
         if (scoreState == ScoreState::P1Scored) {
             // P1 celebrating — P2 sighing; suppress both base sprites
             if (p1ScoreSprite1 && p1ScoreSprite2 && p1SighSprite && p2SighSprite) {
@@ -1580,7 +1564,6 @@ public:
                 flashTimer += dt;
                 flashPhase  = (sin(flashTimer * 3.5f) + 1.f) * 0.5f; // 0..1
                 burstAngle += dt * 3.f;
-                // Keep score animation ticking even on game-over screen
                 if (scoreState != ScoreState::None) {
                     scoreStateTimer -= dt;
                     if (scoreState == ScoreState::P1Scored) {
