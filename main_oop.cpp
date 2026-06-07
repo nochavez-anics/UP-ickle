@@ -470,7 +470,8 @@ public:
         p2SighSprite.emplace(p2SighTex);
 
         if (!font.openFromFile("assets/PressStart2P-Regular.ttf")) {
-            if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc")) return false;
+            // if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc")) return false; // macOS
+            if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) return false; // for windows
         }
 
         score1Text.emplace(font, "0", 36);
